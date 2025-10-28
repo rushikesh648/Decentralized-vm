@@ -1,0 +1,14 @@
+{
+    "service_name": "DataProcessor",
+    "version": "1.2.0",
+    "settings": {
+        "max_workers": 8,
+        "timeout_seconds": 30,
+        "debug_mode": true
+    },
+    "database": {
+        "host": "localhost",
+        "port": 5432,
+        "user": "admin"
+    }
+}
