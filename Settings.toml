@@ -1,0 +1,60 @@
+use serde::{Deserialize, Serialize};
+use config::{Config, ConfigError};
+
+// --- 1. Define the Configuration Structure ---
+
+// Use the derive macros from 'serde' to automatically implement
+// the necessary traits for reading/writing config data.
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Settings {
+    pub server: ServerConfig,
+    pub database: DatabaseConfig,
+    pub debug: bool,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct ServerConfig {
+    pub host: String,
+    pub port: u16, // u16 for port number
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct DatabaseConfig {
+    pub url: String,
+    pub pool_size: u32,
+}
+
+// --- 2. Function to Load Configuration ---
+
+impl Settings {
+    pub fn new() -> Result<Self, ConfigError> {
+        // Create a new configuration builder
+        let s = Config::builder()
+            // Add configuration from a file named 'Settings.toml'
+            // The file path is relative to the current working directory.
+            .add_source(config::File::with_name("Settings")) 
+            // Optional: Add environment variables (e.g., APP_DEBUG=true)
+            .add_source(config::Environment::with_prefix("APP"))
+            .build()?; // Build the configuration object
+
+        // Deserialize the configuration into our Rust struct
+        s.try_deserialize()
+    }
+}
+
+// --- 3. Example Usage in main ---
+
+fn main() {
+    match Settings::new() {
+        Ok(settings) => {
+            println!("✅ Config loaded successfully!");
+            println!("Settings: {:?}", settings);
+            println!("Server Host: {}", settings.server.host);
+            println!("DB Pool Size: {}", settings.database.pool_size);
+        }
+        Err(e) => {
+            eprintln!("❌ Configuration Error: {}", e);
+            eprintln!("Ensure 'Settings.toml' exists and is formatted correctly.");
+        }
+    }
+}
