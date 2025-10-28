@@ -1,0 +1,18 @@
+here[package]
+name = "did-vm-host"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Virtual Machine Monitor Components
+kvm = { version = "0.7", features = ["ioctl-check"] }
+vm-memory = "0.9"
+vm-virtio = "0.14"
+linux-loader = "0.14"
+vmm-sys-util = "0.11"
+# ... other rust-vmm crates as needed
+
+# System and Error Handling
+log = "0.4"
+env_logger = "0.10"
+anyhow = "1.0"
