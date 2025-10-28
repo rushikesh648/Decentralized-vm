@@ -1,0 +1,4 @@
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+tokio-postgres = "0.7"
+dotenv = "0.15" # Optional, but recommended for managing credentials
