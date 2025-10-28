@@ -1,0 +1,42 @@
+from urllib.parse import urlunparse, urlencode
+
+def create_full_url_python(host, path, params=None, scheme='https'):
+    """
+    Constructs a complete URL from its components.
+    
+    :param host: The domain name or IP address (e.g., 'api.example.com').
+    :param path: The path component (e.g., '/users/123').
+    :param params: A dictionary of query parameters.
+    :param scheme: The protocol (e.g., 'http' or 'https').
+    :return: The full, encoded URL string.
+    """
+    
+    # 1. Encode query parameters if provided
+    query_string = urlencode(params) if params else ''
+    
+    # 2. Use urlunparse to combine the components
+    # The tuple order is: (scheme, netloc, path, params, query, fragment)
+    full_url = urlunparse((
+        scheme,
+        host,
+        path,
+        '',      # No 'params' (path parameters) used here
+        query_string,
+        ''       # No 'fragment' (hash) used here
+    ))
+    
+    return full_url
+
+# --- Usage Example ---
+host_name = "api.myservice.com"
+endpoint_path = "/v3/data"
+query_parameters = {
+    'user_id': '456', 
+    'filter': 'active_only',
+    'limit': 10
+}
+
+url = create_full_url_python(host_name, endpoint_path, query_parameters)
+
+print(f"Created URL: **{url}**")
+# Output: https://api.myservice.com/v3/data?user_id=456&filter=active_only&limit=10
